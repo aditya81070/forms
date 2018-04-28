@@ -1,0 +1,89 @@
+{% load sorting_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+  </head>
+  <body >
+
+          <form class="form-inline pull-md-right" method="get" action="{% url 'file:search' %}">
+              <input class="form-control" name="q" type="text" placeholder="Search" formmethod="get">
+              <button class="btn" type="submit" formmethod="get">Search</button>
+          </form>
+
+          <form class="form-inline pull-md-left" method="get" action="{% url 'file:sort' %}">
+              {{ sortform }}
+              <button class="btn" type="submit" formmethod="get">Sort</button>
+          </form>
+
+
+
+   <form method="post" novalidate>
+  {% csrf_token %}
+
+  {{ form.non_field_errors }}
+
+  {% for hidden_field in form.hidden_fields %}
+    {{ hidden_field.errors }}
+    {{ hidden_field }}
+  {% endfor %}
+
+
+          <table class="table table-bordered table-hover">
+         <tr>
+             <td>Username</td>
+             <td>State</td>
+             <td>E-mail</td>
+             <td>Year</td>
+             <td>gender</td>
+         </tr>
+         {% for i in data %}
+         <tr>
+             <td>{{ i.username }}</td>
+             <td>{{ i.states }}</td>
+             <td>{{ i.Email }}</td>
+             <td>{{ i.year }}</td>
+             <td>{{ i.gender }}</td>
+         </tr>
+         {% endfor %}
+     </table>
+
+
+
+
+
+    {% if PostModel.has_other_pages %}
+  <ul class="pagination">
+    {% if PostModel.has_previous %}
+      <li><a href="?sort_by={{ sort_by }}&page={{ PostModel.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in PostModel.paginator.page_range %}
+      {% if PostModel.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if PostModel.has_next %}
+      <li><a href="??sort_by={{ sort_by }}&page={{ PostModel.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+   </form>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+   </body>
+</html>
